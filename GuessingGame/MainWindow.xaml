@@ -1,0 +1,213 @@
+<Window x:Class="GuessingGame.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Guess the Fruit" Width="1140" Height="760" MinWidth="1040" MinHeight="700"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource RuledPaper}"
+        FontFamily="{StaticResource Hand}"
+        Foreground="{StaticResource Ink}"
+        FocusManager.FocusedElement="{Binding ElementName=GuessBox}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="92" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <UniformGrid Rows="3">
+            <Ellipse Style="{StaticResource Hole}" />
+            <Ellipse Style="{StaticResource Hole}" />
+            <Ellipse Style="{StaticResource Hole}" />
+        </UniformGrid>
+        <Rectangle Width="2" HorizontalAlignment="Right" Margin="0,0,6,0" Fill="{StaticResource MarginRed}" />
+        <Rectangle Width="2" HorizontalAlignment="Right" Fill="{StaticResource MarginRed}" />
+
+        <Grid Grid.Column="1" Margin="34,10,34,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="340" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal"
+                        TextElement.Foreground="{StaticResource Pencil}" TextElement.FontSize="24">
+                <TextBlock Text="Name:" VerticalAlignment="Bottom" />
+                <Grid Width="230" Margin="10,0,48,0">
+                    <TextBlock x:Name="NameHint" Text="write your name here" FontSize="21" Margin="8,0,0,6"
+                               Foreground="{StaticResource FaintPencil}" VerticalAlignment="Bottom" IsHitTestVisible="False" />
+                    <TextBox x:Name="NameBox" Style="{StaticResource UnderlineBox}" FontSize="26" MaxLength="14"
+                             TextChanged="NameBox_TextChanged" />
+                </Grid>
+                <TextBlock Text="Date:" VerticalAlignment="Bottom" />
+                <TextBlock x:Name="DateText" Margin="10,0,48,0" FontSize="26" Foreground="{StaticResource Ink}"
+                           VerticalAlignment="Bottom" />
+                <TextBlock x:Name="PageText" VerticalAlignment="Bottom" />
+            </StackPanel>
+
+            <Grid Grid.Row="1" HorizontalAlignment="Left" Margin="-6,20,0,0">
+                <Border Background="{StaticResource Highlighter}" Margin="-8,34,-26,4" RenderTransformOrigin="0.5,0.5">
+                    <Border.RenderTransform>
+                        <TransformGroup>
+                            <SkewTransform AngleX="-14" />
+                            <RotateTransform Angle="-2" />
+                        </TransformGroup>
+                    </Border.RenderTransform>
+                </Border>
+                <TextBlock Text="Guess the Fruit!" FontSize="66" FontWeight="Bold" RenderTransformOrigin="0.5,0.5">
+                    <TextBlock.RenderTransform>
+                        <RotateTransform Angle="-3" />
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+            </Grid>
+
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"
+                        VerticalAlignment="Center" Margin="0,16,0,0">
+                <TextBlock x:Name="TimerText" FontSize="30" Foreground="{StaticResource Pencil}"
+                           VerticalAlignment="Center" Margin="0,0,22,0" />
+                <Grid Width="150" Height="104">
+                    <Path Stretch="Fill" Stroke="{StaticResource RedPen}" StrokeThickness="3" Margin="0,4,4,0"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" RenderTransformOrigin="0.5,0.5"
+                          Data="{StaticResource ScribbleLoop}">
+                        <Path.RenderTransform>
+                            <RotateTransform Angle="-8" />
+                        </Path.RenderTransform>
+                    </Path>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"
+                                TextElement.Foreground="{StaticResource RedPen}">
+                        <TextBlock x:Name="ScoreText" FontSize="46" FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock Text="points" FontSize="18" HorizontalAlignment="Center" Margin="0,-12,0,0" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Margin="0,14,30,0">
+                <TextBlock Text="The mystery fruit is..." FontSize="24" Foreground="{StaticResource Pencil}" />
+                <TextBlock x:Name="WordText" FontSize="56" FontWeight="Bold" Margin="22,0,0,4" />
+
+                <StackPanel x:Name="PlayArea">
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                        <TextBlock Text="My guess:" FontSize="30" VerticalAlignment="Center" />
+                        <TextBox x:Name="GuessBox" Style="{StaticResource UnderlineBox}" Width="250" MaxLength="20"
+                                 Margin="14,0,20,0" VerticalAlignment="Center" KeyDown="GuessBox_KeyDown" />
+                        <Button x:Name="GuessButton" Content="Guess!" Style="{StaticResource ScribbleButton}"
+                                Click="GuessButton_Click" />
+                    </StackPanel>
+                    <TextBlock x:Name="FeedbackText" FontSize="27" Foreground="{StaticResource RedPen}"
+                               Margin="6,8,0,0" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <WrapPanel x:Name="EndArea" Visibility="Collapsed" Margin="8,8,0,0">
+                    <StackPanel x:Name="Stamp" RenderTransformOrigin="0.5,0.5">
+                        <StackPanel.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform x:Name="StampScale" />
+                                <RotateTransform Angle="-7" />
+                            </TransformGroup>
+                        </StackPanel.RenderTransform>
+                        <TextBlock x:Name="StampText" FontSize="52" FontWeight="Bold" Foreground="{StaticResource RedPen}" />
+                        <Border Height="12" Margin="0,-4,0,0" Background="{StaticResource RedPen}"
+                                OpacityMask="{StaticResource DoubleLineMask}" />
+                        <TextBlock x:Name="StampNote" FontSize="23" Foreground="{StaticResource RedPen}" Margin="6,4,0,0" />
+                    </StackPanel>
+                    <Button x:Name="NextPageButton" Content="Turn the page →" Style="{StaticResource InkLink}"
+                            VerticalAlignment="Bottom" Margin="22,10,0,4" Click="NextPageButton_Click" />
+                </WrapPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                    <TextBlock Text="Tries left:" FontSize="27" VerticalAlignment="Center" />
+                    <StackPanel x:Name="TriesPanel" Orientation="Horizontal" Margin="16,0,0,0" />
+                </StackPanel>
+
+                <ItemsControl x:Name="HintList" Margin="26,8,0,0" RenderTransformOrigin="0,0.5">
+                    <ItemsControl.RenderTransform>
+                        <RotateTransform Angle="-1.5" />
+                    </ItemsControl.RenderTransform>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" FontSize="26" Foreground="{StaticResource RedPen}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel x:Name="CrossedOutRow" Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock Text="Crossed out:" FontSize="24" Foreground="{StaticResource Pencil}"
+                               VerticalAlignment="Center" />
+                    <ItemsControl x:Name="WrongList" Margin="14,0,0,0">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" FontSize="27" Margin="0,0,20,0"
+                                           TextDecorations="{StaticResource RedStrike}" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+
+            <Grid Grid.Row="2" Grid.Column="1" VerticalAlignment="Top" Margin="8,22,8,0">
+                <Border Style="{StaticResource StickyNote}">
+                    <StackPanel>
+                        <TextBlock Text="Top 5 scores" FontSize="32" FontWeight="Bold" />
+                        <Path Stretch="Fill" Width="190" Height="6" HorizontalAlignment="Left" Margin="0,0,0,10"
+                              Stroke="{StaticResource Ink}" StrokeThickness="2" StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round" Data="M 0,3 C 30,0 60,6 100,2" />
+                        <TextBlock x:Name="LeaderboardEmpty" Text="Nobody yet. Be the first!" FontSize="23"
+                                   Foreground="{StaticResource Pencil}" />
+                        <ItemsControl x:Name="LeaderboardList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border x:Name="Row" Padding="4,0" Margin="-4,1">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30" />
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="44" />
+                                                <ColumnDefinition Width="52" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Rank, StringFormat={}{0}.}" FontSize="25" />
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}" FontSize="25"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Grid.Column="2" Text="{Binding Score}" FontSize="25"
+                                                       FontWeight="Bold" HorizontalAlignment="Right" />
+                                            <TextBlock Grid.Column="3" Text="{Binding Time}" FontSize="20"
+                                                       Foreground="{StaticResource Pencil}" HorizontalAlignment="Right"
+                                                       VerticalAlignment="Center" />
+                                        </Grid>
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsNew}" Value="True">
+                                            <Setter TargetName="Row" Property="Background" Value="#80FF6FB5" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+                <Rectangle Width="110" Height="30" Fill="#A8F2ECDA" VerticalAlignment="Top"
+                           HorizontalAlignment="Center" Margin="0,-14,0,0" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <RotateTransform Angle="-6" />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </Grid>
+
+            <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" Margin="14,0,0,4"
+                        TextElement.Foreground="{StaticResource Pencil}" TextElement.FontSize="20">
+                <TextBlock Text="Rules (copy these down!)" FontWeight="Bold" FontSize="22" />
+                <TextBlock Text="• 5 guesses per fruit" />
+                <TextBlock Text="• right answer +10, wrong answer −1" />
+                <TextBlock Text="• a new hint after every miss" />
+                <TextBlock Text="• the clock is ticking..." />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
